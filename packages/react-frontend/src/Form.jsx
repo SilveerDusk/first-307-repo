@@ -1,5 +1,5 @@
 // src/Form.jsx
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 function Form(props) {
   const [person, setPerson] = useState({
@@ -9,7 +9,7 @@ function Form(props) {
 
   function submitForm() {
     props.handleSubmit(person);
-    setPerson({ name: "", job: "" });
+    setPerson({ name: '', job: '' });
   }
 
   function handleChange(event) {
