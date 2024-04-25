@@ -70,17 +70,17 @@ app.get("/users", (req, res) => {
   if (name != undefined && job != undefined) {
     let result = findUserByNameAndJob(name, job);
     result = { users_list: result };
-    res.send(result);
+    res.status(200).send(result);
   } else if (name != undefined) {
     let result = findUserByName(name);
     result = { users_list: result };
-    res.send(result);
+    res.status(200).send(result);
   } else if (job != undefined) {
     let result = findUserByJob(job);
     result = { users_list: result };
-    res.send(result);
+    res.status(200).send(result);
   } else {
-    res.send(users);
+    res.status(200).send(users);
   }
 });
 
@@ -93,27 +93,33 @@ app.get("/users/:id", (req, res) => {
   if (result === undefined) {
     res.status(404).send("Resource not found.");
   } else {
-    res.send(result);
+    res.status(200).send(result);
   }
 });
 
 const addUser = (user) => {
+  console.log(user);
   users["users_list"].push(user);
   return user;
 };
 
 app.post("/users", (req, res) => {
-  const userToAdd = req.body;
+  const {name, job} = req.body;
+  const id = Math.random().toString(10).substring(3,9);
+  const userToAdd = {id, name, job};
   addUser(userToAdd);
-  res.send();
+  res.status(201).send();
 });
 
 app.delete("/users/:id", (req, res) => {
-  const id = req.params.id;
-  const index = users["users_list"].findIndex(
-    (user) => user.id === id
-  );
-  users["users_list"].splice(index, 1);
-
-  res.send(users);
+  try {
+    const id = req.params.id;
+    const index = users["users_list"].findIndex(
+      (user) => user.id === id
+    );
+    users["users_list"].splice(index, 1);
+    res.status(204).send();
+  } catch {
+    res.status(404);
+  }
 });
