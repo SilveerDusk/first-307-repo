@@ -9,7 +9,7 @@ function MyApp() {
   useEffect(() => {
     fetchUsers()
       .then((res) => res.json())
-      .then((json) => setCharacters(json["users_list"]))
+      .then((data) =>  setCharacters(data) )
       .catch((error) => { console.log(error); });
   }, [] );
 
@@ -39,16 +39,19 @@ function MyApp() {
     return promise;
   }
 
-  function removeOneCharacter(index) {
-    const person = characters[index];
-    const promise = fetch(`Http://localhost:8000/users/${person.id}`, {
+  function removeOneCharacter(id) {
+    const promise = fetch(`http://localhost:8000/users/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(person),
+      body: JSON.stringify({ "id": id }),
+    }).then(() => {
+      fetchUsers()
+        .then((res) => res.json())
+        .then((data) =>  setCharacters(data) )
+        .catch((error) => { console.log(error); });
     });
-
     return promise;
   }
 
