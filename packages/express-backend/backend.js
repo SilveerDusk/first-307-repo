@@ -26,28 +26,28 @@ app.get("/users", (req, res) => {
       (result) => {
         users = result;
         res.status(200).send(users);
-      }).catch();
+      }).catch( (error) => { console.log(error); });
   } else if (name != undefined) {
     let users
     findUserByName(name).then(
       (result) => {
         users = result;
         res.status(200).send(users);
-      }).catch();
+      }).catch( (error) => { console.log(error); });
   } else if (job != undefined) {
     let users
     findUserByJob(job).then(
       (result) => {
         users = result;
         res.status(200).send(users);
-      }).catch();
+      }).catch( (error) => { console.log(error); });
   } else {
     let users 
     getUsers().then(
       (result) => {
         users = result;
         res.status(200).send(users);
-      }).catch();
+      }).catch( (error) => { console.log(error); });
   }
 });
 
@@ -63,20 +63,24 @@ app.get("/users/:id", (req, res) => {
       } else {
         res.status(200).send(user);
       }
-    }).catch();
+    }).catch( (error) => { console.log(error); });
 });
 
 app.post("/users", (req, res) => {
+  let newUser
   addUser(req.body).then(
-    () => {
-      res.status(201).send();
-    }).catch();
+    (result) => {
+      newUser = result;
+      res.status(201).send(newUser);
+    }).catch( (error) => { console.log(error); });
 });
 
 app.delete("/users/:id", (req, res) => {
   const id = req.body.id;
+  let deleteduser
   deleteUser(id).then(
-    () => {
-      res.status(204).send();
+    (result) => {
+      deleteduser = result
+      res.status(204).send(deleteduser);
     }).catch( (error) => { console.log(error); });
 });
